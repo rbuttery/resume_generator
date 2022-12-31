@@ -5,7 +5,7 @@ def generate_content(prompt: str) -> str:
     # Open the API key file
 #     with open(r".\secret.txt", "r") as f:
 #         openai.api_key = f.read()
-    openai.api_key = st.secrets["my_cool_secrets"]
+    openai.api_key = st.secrets["API_KEY"]
     # Generate the content
     completions = openai.Completion.create(
         engine="text-davinci-003",
