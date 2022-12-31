@@ -1,93 +1,108 @@
 import streamlit as st
-import openai
+# st.set_page_config(layout="wide")
 
-def generate_content(prompt: str) -> str:
-    # Open the API key file
-    with open(r"C:\Users\rober\secret.txt", "r") as f:
-        openai.api_key = f.read()
-    # Generate the content
-    completions = openai.Completion.create(
-        engine="text-davinci-003",
-        prompt=prompt,
-        max_tokens=750,
-        n=1,
-        stop=None,
-        temperature=0.9,
-    )
-    return completions.choices[0].text
+st.set_page_config(
+    page_title="Resume Builder",
+    # layout="wide",
+    initial_sidebar_state="expanded",
+    page_icon='📄'
+)
 
-col1, col2 = st.columns([2, 4])
+# Page title
+st.markdown("""
+<html>
+<head>
+  <style>
+    h1 {
+      font-size: 36px;
+      font-weight: bold;
+      text-align: center;
+      margin: 0;
+    }
+    h2 {
+      font-size: 20px;
+      font-weight: normal;
+      text-align: center;
+      margin: 0;
+    }
+    p {
+      font-size: 16px;
+      font-weight: normal;
+      text-align: center;
+      margin: 0;
+    }
+    .title {
+      padding-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="title">
+    <h1>AI-Assisted Resume & Cover Letter<br><br></h1>
+  </div>
+</body>
+</html>""", unsafe_allow_html=True)
+
+html_buttons = """
+<html>
+  <head>
+    <style>
+      .column {
+        width: 50%;
+        float: left;
+        text-align: center;
+      }
+      .button {
+        display: inline-block;
+        padding: 15px 25px;
+        font-size: 38px;
+        cursor: pointer;
+        text-align: center;
+        text-decoration: none;
+        outline: none;
+        color: #fff;
+        background-color: #FF534C;
+        border: none;
+        border-radius: 15px;
+      }
+      
+
+      .button:hover {
+        background-color: #FFCBC9;
+      }
+    </style>
+  </head>
+  
+  <body>
+    <div class="column">
+      <a href="http://www.example.com" target="_blank" class="button" style="color: #ffffff";>Resumes</a>
+    </div>
+    <div class="column">
+      <a href="http://www.example.com" target="_blank" class="button" style="color: #ffffff";>Cover Letters</a>
+    </div>
+  </body>
+
+"""
 
 with st.sidebar:
+  st.markdown("""<a href="https://beta.openai.com/docs/introduction" style="color: #191919;">Build your own OpenAI Models</a>""", unsafe_allow_html=True)
 
-    # Create a blank dictionary to store user data
-    user_data = {}
+col1, col2, col3= st.columns([1.5, 0.1, 1.5])
 
-    # Set the title
-    st.title("Resume Builder")
+with col1:
+    with st.container():
+      st.markdown("<p>Get assistance from a model that is trained on creating ATS-friendly Resumes and Cover Letters.<br><br>Maintain as much creative freedom as you like, <i>but its no longer necessary.</i><br><br><br>", unsafe_allow_html=True)
+    
+with col2:
+    # This just creates a space between the two columns
+    with st.container():
+        pass
 
-    # Get user's name
-    name = st.text_input("Name")
 
-    # Get user's email
-    email = st.text_input("Email")
+with col3:
+    with st.container():
+        # st.image('https://i.imgur.com/XHnIEZE.png')
+        pass
 
-    # Get user's contact info
-    contact = st.text_input("Contact Number")
-    
-    # Get user's location
-    location = st.text_input("Location")
-    
-    # Get user's education
-    education = st.text_input("Education")
-    
-    # Get user's experience
-    experience = st.text_input("Experience")
-    
-    # Get user's skills
-    skills = st.text_input("Skills")
-    
-    # Add user data to the dictionary
-    user_data['name'] = name
-    user_data['email'] = email
-    user_data['contact'] = contact
-    user_data['location'] = location
-    user_data['education'] = education
-    user_data['experience'] = experience
-    user_data['skills'] = skills
-
-    generate_resume = st.button("Generate Resume")
-
-# Render the resume
-if generate_resume:
-    
-    # Name and contact info
-    st.markdown(f"<h1 style='text-align: center; color: black;'>{user_data['name']}</h1>", unsafe_allow_html=True)
-    st.markdown(f"<p style='text-align: center; color: black;'>{user_data['email']} || {user_data['contact']} || {user_data['location']}</p>", unsafe_allow_html=True)
-    
-    # Summary
-    st.markdown(f"<h3 style='text-align: left; color: black;'>Summary</h3>", unsafe_allow_html=True)
-            ###### AI PROMPT ######
-    ai_summary = generate_content(prompt=f'Create a professional summary in 80 words or less, embelish on their abilities & use flowery language, make it 1st person, do not mention contact details, only using this data: {user_data}. ')
-    st.markdown(f"<p style='text-align: left; color: black;'>{ai_summary}</p>", unsafe_allow_html=True)
-    
-    # Experience
-    st.markdown(f"<h3 style='text-align: left; color: black;'>Experience</h3>", unsafe_allow_html=True)
-    ai_experience = generate_content(prompt=f'Neatly format their experience where the duties are summarized into a bullet point list, embelish on their duties & use flowery language, make it 1st person, make it past tense, do not mention contact details, only using this data: {user_data}. ')
-    st.markdown(f"<p style='text-align: left; color: black;'>{ai_experience}</p>", unsafe_allow_html=True)
-    
-    # Education
-    st.markdown(f"<h3 style='text-align: left; color: black;'>Education</h3>", unsafe_allow_html=True)
-    # ai_education = generate_content(prompt='')
-    st.markdown(f"<p style='text-align: left; color: black;'>{user_data['education']}</p>", unsafe_allow_html=True)
-    
-    # Skills
-    st.markdown(f"<h3 style='text-align: left; color: black;'>Skills</h3>", unsafe_allow_html=True)
-    ai_skills = generate_content(prompt=f'Create a bullet-point list of skills, embelish on their skills & use flowery language, make it 1st person, only using this data: {user_data}.')
-    st.markdown(f"<p style='text-align: left; color: black;'>{ai_skills}</p>", unsafe_allow_html=True)
-    
-    # References
-    st.markdown(f"<h3 style='text-align: left; color: black;'>References</h3>", unsafe_allow_html=True)
-    st.markdown(f"<p style='text-align: left; color: black;'>Excellent character & professional references available upon request.</p>", unsafe_allow_html=True)
-
-        
+with st.container():
+  st.markdown(html_buttons, unsafe_allow_html=True)
